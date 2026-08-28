@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday! 🤍</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f9f6f0; 
+            --text-main: #5a4f4c; 
+            --text-light: #8c7f7b;
+            --accent-pink: #f4dcd6;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden; 
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 450px;
+            position: relative;
+            background-color: var(--bg-color);
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateY(20px);
+            background-color: var(--bg-color);
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: var(--accent-pink);
+            color: var(--text-main);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        
+        .btn:active { transform: scale(0.95); }
+
+        #screen-1 {
+            justify-content: center;
+        }
+        #screen-1 h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        
+        .envelope-wrapper {
+            margin-top: 40px;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .envelope {
+            width: 200px;
+            height: 140px;
+            background-color: #fff;
+            border: 2px solid var(--accent-pink);
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .envelope::before {
+            content: '♡';
+            font-size: 2rem;
+            color: #d19a9a;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 50%;
+            border-bottom: 2px solid var(--accent-pink);
+            border-radius: 10px 10px 50% 50%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .avatar {
+            width: 80px; height: 80px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .message-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            width: 100%;
+        }
+        
+        .audio-player-mock {
+            display: flex;
+            align-items: center;
+            background: var(--accent-pink);
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-top: 20px;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .audio-player-mock span { font-size: 0.85rem; font-weight: 500; }
+
+        .album-container {
+            width: 100%;
+            height: 300px;
+            background: #fff;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            position: relative;
+            padding: 20px;
+            border: 1px dashed var(--text-light);
+        }
+        
+        .album-img-placeholder {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .album-caption {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .wishes-grid {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+        }
+        
+        .wish-card {
+            flex: 1;
+            background: #fff;
+            padding: 20px 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.03);
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .wish-card.opened {
+            background: var(--accent-pink);
+            border-color: #e2c2c2;
+        }
+        
+        .wish-content {
+            display: none;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        
+        .wish-card.opened .wish-content { display: block; }
+        .wish-card.opened .pick-me { display: none; }
+        .pick-me { font-size: 0.7rem; letter-spacing: 1px; color: var(--text-light); }
+
+        .letter-paper {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            width: 100%;
+            line-height: 1.8;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .letter-paper::before {
+            content: '✿';
+            position: absolute;
+            top: 10px; right: 20px;
+            color: var(--accent-pink);
+            font-size: 1.5rem;
+        }
+        
+        .signature {
+            margin-top: 30px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: right;
+            font-size: 1.1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ================= AUDIO SECTION ================= -->
+    <!-- Screen 2 Song -->
+    <audio id="song-5" loop>
+        <source src="https://www.dropbox.com/scl/fi/14b00ui2g3itvtlc8bzno/Ki-Honda-Pyaar-Jabariya-Jodi-_-Sidharth-Malhotra-Parineeti-Chopra_-Vishal-Mishra-_-ARIJIT-SINGH-AudioTrimmer.com.mp3?rlkey=cte88ashzg45p6t5ncihb3lrf&st=9fueykmf&raw=1" type="audio/mpeg">
+    </audio>
+
+    <!-- Screen 3 Song (Replace link below) -->
+    <audio id="song-4" loop>
+        <source src="https://www.dropbox.com/scl/fi/k08wyrchjxm3rj7c2ajb9/Tareefan-_-Veere-Di-Wedding-_-QARAN-Ft.-Badshah-_-Kareena-Kapoor-Khan-Sonam-Kapoor-Swara-Shikha-AudioTrimmer.com.mp3?rlkey=5o5n1mib5tvl362o6qv6d4esw&st=ueey0drw&raw=1" type="audio/mpeg">
+    </audio>
+
+    <!-- Screen 4 Song (Replace link below) -->
+    <audio id="song-3" loop>
+        <source src="https://www.dropbox.com/scl/fi/42ae4pcw9p5wpj05re44e/Akull-Laal-Bindi-AudioTrimmer.com.mp3?rlkey=jlnmnhqa5hcbjnh7t4tzlyz01&st=we9r8atx&raw=1" type="audio/mpeg">
+    </audio>
+
+    <!-- Screen 5 Song (Replace link below) -->
+    <audio id="song-2" loop>
+        <source src="https://www.dropbox.com/scl/fi/j30skazgtygivtt62m67u/ONLY-YOU-Official-Video-Armaan-Gill-and-Arnaaz-Gill-AudioTrimmer.com.mp3?rlkey=5hsqdy1tx2szj5ckf1iclvr62&st=z5p0b714&raw=1" type="audio/mpeg">
+    </audio>
+    <!-- ================================================= -->
+
+    <div id="app-container">
+        
+        <!-- Screen 1 -->
+        <div id="screen-1" class="screen active">
+            <p class="subtitle">∞ Shivani Dhiman &lt;3</p>
+            <h1>a little something for you</h1>
+            <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #d19a9a;">happy birthday ♡</p>
+            
+            <div class="envelope-wrapper" onclick="openEnvelope()">
+                <div class="envelope">
+                    <div class="envelope-flap"></div>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-light);">tap the envelope to open</p>
+        </div>
+
+        <!-- Screen 2 -->
+        <div id="screen-2" class="screen">
+            <p class="subtitle">✿ ONLY FOR YOU ✿</p>
+            <h1>Happy Birthday<br><span style="font-size: 1.5rem; font-style: italic; color: #a88585;">Shivani Jii</span></h1>
+            
+            <div class="message-box">
+                Today is yours. A whole little garden of wishes. 🌸 I still remember seeing you in that red top for the first time. It was such a small moment, but somehow you looked so beautiful that it stayed with me. I’m not with you today, but somehow, you’re always with me—in my thoughts and in my heart. ❤️
+            </div>
+
+            <div class="audio-player-mock">
+                <span> Keep that beautiful smile forever ❤️, Happy birthday ✨</span>
+            </div>
+
+            <button class="btn" onclick="nextScreen(3)">Let's see whats ahead 🕊️ ➔</button>
+        </div>
+
+        <!-- Screen 3 -->
+        <div id="screen-3" class="screen">
+            <p class="subtitle">album</p>
+            <p style="font-size: 0.9rem; text-align: center; margin-bottom: 15px;">This is the only photo of you I have ♡ and somehow, it’s still one of my favourites. 🎀🌷✨</p>
+            
+            <div class="album-container">
+                <img id="album-img" src="https://i.ibb.co/tw1CNy6v/Screenshot-2026-08-28-22-15-01-52-1c337646f29875672b5a61192b9010f9.jpg" alt="album photo" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+                
+                <h3 class="album-caption" id="album-text">My favourite photo of you ♡</h3>
+                
+                <div style="display: flex; justify-content: space-between; width: 100%; position: absolute; padding: 0 10px;">
+                    <button style="border:none; background:none; font-size: 1.5rem; cursor:pointer; color: var(--text-main);" onclick="changeSlide(-1)">❮</button>
+                    <button style="border:none; background:none; font-size: 1.5rem; cursor:pointer; color: var(--text-main);" onclick="changeSlide(1)">❯</button>
+                </div>
+            </div>
+
+            <button class="btn" onclick="nextScreen(4)">SEE YOUR WISHES ➔</button>
+        </div>
+
+        <!-- Screen 4 -->
+        <div id="screen-4" class="screen">
+            <h2>a tiny bouquet of my Ashirwads✋🏻 for you!</h2>
+            <p style="font-size: 0.8rem; text-align: center; margin-top: 5px;">pick each flower – there's a little Ashirwads✋🏻 inside ♡</p>
+            
+            <div class="wishes-grid">
+                <div class="wish-card" onclick="this.classList.add('opened')">
+                    <div style="font-size: 2rem;">🌸</div>
+                    <div class="pick-me">PICK ME</div>
+                    <div class="wish-content">May your smile always stay as beautiful and effortless as it was the first time I saw you, and may you always have a thousand little reasons to keep smiling. ❤️✨</div>
+                </div>
+                <div class="wish-card" onclick="this.classList.add('opened')">
+                    <div style="font-size: 2rem;">🌼</div>
+                    <div class="pick-me">PICK ME</div>
+                    <div class="wish-content">May life bring you all the love, happiness, peace, and beautiful moments your heart deserves, and may every year make you feel more loved and cherished. 🌷🤍</div>
+                </div>
+                <div class="wish-card" onclick="this.classList.add('opened')">
+                    <div style="font-size: 2rem;">🌷</div>
+                    <div class="pick-me">PICK ME</div>
+                    <div class="wish-content">And maybe, someday, I’ll get to be a little part of that happiness, making memories with you that become just as special to me as that very first moment I saw you. 🫶🏻🌙</div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="nextScreen(5)">READ MY LETTER ➔</button>
+        </div>
+
+        <!-- Screen 5 -->
+        <div id="screen-5" class="screen">
+            <p class="subtitle">✿ A LETTER, JUST FOR YOU ✿</p>
+            <h2>Miss. Shivani Jii,</h2>
+            
+            <div class="letter-paper">
+                It’s funny how some stories begin with something as simple as seeing someone in a red dress and somehow end up becoming a little special. I still remember that moment, and then asking for your Instagram and you actually giving it to me. I guess that was my first little win. ✨                <br><br>
+                Then came our McDonald’s day — our first proper conversation, both of us somehow wearing blue, completely unplanned but cute enough to remember. 💙 I still remember sitting there, talking to you, and then finding out about your boyfriend. I won’t lie, my heart did a tiny ouch that day, but I smiled and carried on. :)                <br><br>
+                And then somehow, one conversation turned into daily chats, random reels, silly conversations, and all those little moments that slowly made you special to me.<br><br>
+                So, on your birthday, I just want to wish you the happiest things — a life full of reasons to smile, people who make you feel loved, and moments that you’ll want to keep forever. And if I’m lucky, maybe I’ll get to be a small part of a few of those moments in the future too. 🌷✨
+                <div class="signature">
+                    with all my love,<br>
+                    <strong>Nishant ♡</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openEnvelope() {
+            nextScreen(2);
+        }
+
+        function nextScreen(screenNumber) {
+            // 1. Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // 2. Show the target screen
+            document.getElementById('screen-' + screenNumber).classList.add('active');
+            document.getElementById('app-container').scrollTop = 0;
+
+            // 3. Stop ALL songs from playing
+            for (let i = 2; i <= 5; i++) {
+                let audioObj = document.getElementById('song-' + i);
+                if (audioObj) {
+                    audioObj.pause();
+                    audioObj.currentTime = 0; // Rewind song to beginning
+                }
+            }
+
+            // 4. Play the specific song for this new screen
+            let currentAudio = document.getElementById('song-' + screenNumber);
+            if (currentAudio) {
+                currentAudio.volume = 0.5; 
+                currentAudio.play().catch(error => console.log("Audio playback was blocked by browser."));
+            }
+        }
+
+        // Fixed photo slider logic so it works with your ImgBB image
+        const slides = [
+            { 
+                image: "https://i.ibb.co/tw1CNy6v/Screenshot-2026-08-28-22-15-01-52-1c337646f29875672b5a61192b9010f9.jpg", 
+                caption: "My favourite photo of you ♡" 
+            },
+            { 
+                image: "https://i.ibb.co/GvZJk57W/Screenshot-2026-08-28-22-59-31-58-1c337646f29875672b5a61192b9010f9.jpg",
+                caption: "Just another reason to smile ✨" 
+            }
+        ];
+        
+        let currentSlide = 0;
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            
+            document.getElementById('album-img').src = slides[currentSlide].image;
+            document.getElementById('album-text').innerText = slides[currentSlide].caption;
+        }
+    </script>
+</body>
+</html>
